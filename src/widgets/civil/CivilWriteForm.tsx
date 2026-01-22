@@ -3,7 +3,7 @@ import Input from '@/shared/Input';
 import Textarea from '@/shared/Textarea';
 import Button from '@/shared/Button';
 import Select from '@/shared/Select';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import useComplaintDetailStore from '@/lib/stores/useComplaintDetailStore';
 import { createComplaint, updateComplaint } from '@/lib/api/complaints';
 import { ComplaintsCreateRequest, ComplaintsUpdateRequest } from '@/lib/types';
@@ -21,15 +21,28 @@ export default function CivilWriteForm({ isEdit = false }: Props) {
   const [content, setContent] = useState('');
   const [isPublic, setIsPublic] = useState(true);
 
-  const {apartmentId} = useApartmentId();
+  const { apartmentId } = useApartmentId();
 
-  const { updateParams, update: updateData } = useComplaintDetailStore();
+  const { data: complaint, updateParams, update: updateData } = useComplaintDetailStore();
+  const initializedRef = useRef(false);
 
   useEffect(() => {
     if (isEdit && id && typeof id === 'string') {
-      updateParams({id});
+      setTitle('');
+      setContent('');
+      setIsPublic(true);
+      initializedRef.current = false;
+      updateParams({ id });
     }
-  }, [isEdit, id]);
+  }, [isEdit, id, updateParams]);
+
+  useEffect(() => {
+    if (!isEdit || !complaint || initializedRef.current) return;
+    setTitle(complaint.title ?? '');
+    setContent(complaint.content ?? '');
+    setIsPublic(complaint.isPublic ?? true);
+    initializedRef.current = true;
+  }, [isEdit, complaint]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -60,7 +73,10 @@ export default function CivilWriteForm({ isEdit = false }: Props) {
       router.push('/resident/civil');
     } catch (error) {
       console.error('민원 등록/수정 실패', error);
-      alert('요청에 실패했습니다.');
+      // alert('요청에 실패했습니다.');
+      const message =
+        (error as any)?.response?.data?.message ?? '요청에 실패했습니다.';
+      alert(message);
     }
   };
 
@@ -77,7 +93,7 @@ export default function CivilWriteForm({ isEdit = false }: Props) {
               ]}
               small={true}
               onChange={(val) => setIsPublic(val === 'public')}
-              defaultValue={isPublic ? 'public' : 'private'}
+              value={isPublic ? 'public' : 'private'}
             />
           </div>
         </li>
