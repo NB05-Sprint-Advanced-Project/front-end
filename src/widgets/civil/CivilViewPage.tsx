@@ -58,7 +58,9 @@ export default function CivilViewPage() {
       window.alert(`상태가 "${currentLabel}"에서 "${newLabel}"(으)로 변경되었습니다.`);
     } catch (err) {
       console.error('상태 변경 실패:', err);
-      window.alert('상태 변경에 실패했습니다.');
+      const message =
+        (err as any)?.response?.data?.message ?? '상태 변경에 실패했습니다.';
+      window.alert(message);
     }
   };
 
