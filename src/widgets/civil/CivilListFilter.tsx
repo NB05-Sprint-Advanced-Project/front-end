@@ -88,7 +88,7 @@ export function AdminCivilListFilter({
     if (value == 'all') {
       onVisibilityChange();
     } else {
-      onVisibilityChange(Boolean(value));
+      onVisibilityChange(value === 'true');
     }
   }, [onVisibilityChange]);
 
