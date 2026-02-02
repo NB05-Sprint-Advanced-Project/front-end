@@ -41,6 +41,7 @@ export default function CivilViewPage() {
       PENDING: '접수전',
       IN_PROGRESS: '처리중',
       RESOLVED: '처리완료',
+      REJECTED: '처리불가',
     }[newStatus];
 
     const confirmed = window.confirm(
@@ -93,9 +94,11 @@ export default function CivilViewPage() {
               { value: 'PENDING', label: '접수전' },
               { value: 'IN_PROGRESS', label: '처리중' },
               { value: 'RESOLVED', label: '처리완료' },
+              { value: 'REJECTED', label: '처리불가' },
             ]}
             defaultValue={complaint.status}
             small={true}
+            disabled={complaint.status === 'RESOLVED' || complaint.status === 'REJECTED'}
             onChange={handleStatusChange}
           />
         </div>
