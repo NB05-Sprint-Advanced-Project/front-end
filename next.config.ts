@@ -4,7 +4,7 @@ import type { Configuration } from 'webpack';
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['sprint-be-project.s3.ap-northeast-2.amazonaws.com'],
+    domains: ['codeit-welive-bucket.s3.ap-northeast-2.amazonaws.com'],
   },
   webpack(config: Configuration) {
     config.module?.rules?.push({

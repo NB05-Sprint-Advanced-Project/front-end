@@ -59,7 +59,7 @@ export default function ProfileForm() {
         await updateMyAvatar(selectedFile);
       }
 
-      alert(`프로필이 성공적으로 수정되었습니다. ${passwordUpdate && '다시 로그인해주세요.'}`);
+      alert(`프로필이 성공적으로 수정되었습니다. ${passwordUpdate ? '다시 로그인해주세요.' : ""}`);
       if(passwordUpdate) {
         await logout();
         window.location.href = '/';
