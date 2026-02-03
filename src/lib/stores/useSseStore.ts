@@ -38,6 +38,7 @@ export default create<SseState>((set, get) => ({
       };
 
       eventSource.onerror = (error) => {
+        console.log(error);
         console.error('[SSE] Error:', { error, readyState: eventSource.readyState });
         set({
           isConnected: false,
@@ -75,6 +76,7 @@ export default create<SseState>((set, get) => ({
     // 구독 정보 저장
     const wrappedCallback = (event: MessageEvent) => {
       try {
+        console.log(event.data)
         const data = JSON.parse(event.data);
         callback(data);
       } catch (error) {

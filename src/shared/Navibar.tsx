@@ -67,8 +67,8 @@ export default function Navibar() {
     if (isConnected) {
       subscribe(TOPIC, (newNotifications: NotificationDto[]) => {
         try {
+          console.log('Received notifications via SSE:', newNotifications); 
           newNotifications.forEach(n => addData(n));
-
         } catch (error) {
           console.error('알림 데이터 파싱 에러:', error);
         }

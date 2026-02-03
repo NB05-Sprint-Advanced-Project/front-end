@@ -16,6 +16,7 @@ import { formatPhoneNum } from '@/shared/hooks/formatPhoneNum';
 import useAdminUserStore from '@/lib/stores/useAdminUserStore';
 import { AdminUserDto, AdminUserUpdateRequest } from '@/lib/types';
 import { deleteAdminUser, updateAdminUser, updateAdminUserJoinStatus } from '@/lib/api/users';
+import { AxiosError, isAxiosError } from 'axios';
 
 export default function SuperAdminTable() {
   const { data, delete: deleteData, update: updateData, params, loading } = useAdminUserStore();
@@ -137,8 +138,12 @@ export default function SuperAdminTable() {
       alert('관리자 정보 수정 완료');
       handleClose();
     } catch (error) {
-      alert((error as any).response?.data.message);
-      // alert('관리자 정보 수정 실패');
+      if (isAxiosError(error)) {
+        const axiosError = error as AxiosError<{ message?: string }>;
+        alert(axiosError.response?.data?.message ?? '관리자 정보 수정 실패');
+      } else {
+        alert('관리자 정보 수정 실패');
+      }
     }
   };
   return (
