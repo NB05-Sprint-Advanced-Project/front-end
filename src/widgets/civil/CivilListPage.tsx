@@ -48,7 +48,9 @@ export default function CivilListPage() {
 
     } catch (error) {
       console.error('처리 상태 업데이트 실패:', error);
-      window.alert('상태 변경에 실패했습니다.');
+      const message =
+        (error as any)?.response?.data?.message ?? '상태 변경에 실패했습니다.';
+      window.alert(message);
     }
   };
 

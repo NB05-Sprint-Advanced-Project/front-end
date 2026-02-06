@@ -41,6 +41,7 @@ export default function CivilViewPage() {
       PENDING: '접수전',
       IN_PROGRESS: '처리중',
       RESOLVED: '처리완료',
+      REJECTED: '처리불가',
     }[newStatus];
 
     const confirmed = window.confirm(
@@ -58,7 +59,9 @@ export default function CivilViewPage() {
       window.alert(`상태가 "${currentLabel}"에서 "${newLabel}"(으)로 변경되었습니다.`);
     } catch (err) {
       console.error('상태 변경 실패:', err);
-      window.alert('상태 변경에 실패했습니다.');
+      const message =
+        (err as any)?.response?.data?.message ?? '상태 변경에 실패했습니다.';
+      window.alert(message);
     }
   };
 
@@ -91,9 +94,11 @@ export default function CivilViewPage() {
               { value: 'PENDING', label: '접수전' },
               { value: 'IN_PROGRESS', label: '처리중' },
               { value: 'RESOLVED', label: '처리완료' },
+              { value: 'REJECTED', label: '처리불가' },
             ]}
             defaultValue={complaint.status}
             small={true}
+            disabled={complaint.status === 'RESOLVED' || complaint.status === 'REJECTED'}
             onChange={handleStatusChange}
           />
         </div>

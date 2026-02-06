@@ -129,6 +129,7 @@ export default function CivilListTable({
                             options={statusOptions}
                             defaultValue={item.status}
                             small={true}
+                            disabled={item.status === 'RESOLVED' || item.status === 'REJECTED'}
                             onChange={(val) => {
                               onAdminStatusChange?.(item.id, val as 'IN_PROGRESS' | 'RESOLVED' | 'REJECTED');
                             }}
